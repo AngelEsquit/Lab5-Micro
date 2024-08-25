@@ -1,11 +1,9 @@
-//Escribe un programa en C que ejecute tres funciones diferentes en paralelo usando la directiva #pragma omp sections. Cada sección debe ejecutar una función distinta, por ejemplo, una que calcule el factorial de un número, otra que genere la serie de Fibonacci, y otra que encuentre el máximo en un arreglo, operaciones matemáticas no simples. Asegúrate de que cada función sea independiente y no tenga dependencias con las otras.
-
 #include <stdio.h>
 #include <omp.h>
 
 #define N 1000000
 
-int factorial(int n) {
+int factorial(int n) { // Función para calcular el factorial de un número
     int i, fact = 1;
 
     for (i = 1; i <= n; i++) {
@@ -15,7 +13,7 @@ int factorial(int n) {
     return fact;
 }
 
-int fibonacci(int n) {
+int fibonacci(int n) { // Función para calcular el n-ésimo término de la serie de Fibonacci
     if (n <= 1) {
         return n;
     }
@@ -23,7 +21,7 @@ int fibonacci(int n) {
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-int max(int arr[], int n) {
+int max(int arr[], int n) { // Función para encontrar el valor máximo en un arreglo
     int i, max = arr[0];
 
     for (i = 1; i < n; i++) {
@@ -36,36 +34,37 @@ int max(int arr[], int n) {
 }
 
 int main() {
+    // Inicializa las variables
     double start_time, run_time;
     int fact, fib, max_val;
     int arr[N];
     int i;
 
-    for (i = 0; i < N; i++) {
+    for (i = 0; i < N; i++) { // Inicializa el arreglo con valores del 0 al N-1
         arr[i] = i;
     }
 
-    start_time = omp_get_wtime();
+    start_time = omp_get_wtime(); // Inicia el temporizador
 
-    #pragma omp parallel sections
+    #pragma omp parallel sections // Ejecuta las secciones en paralelo
     {
-        #pragma omp section
+        #pragma omp section // Sección para calcular el factorial de 10
         {
             fact = factorial(10);
         }
 
-        #pragma omp section
+        #pragma omp section // Sección para calcular el término 10 de la serie de Fibonacci
         {
             fib = fibonacci(10);
         }
 
-        #pragma omp section
+        #pragma omp section // Sección para encontrar el valor máximo en el arreglo
         {
             max_val = max(arr, N);
         }
     }
 
-    run_time = omp_get_wtime() - start_time;
+    run_time = omp_get_wtime() - start_time; // Detiene el temporizador
 
     printf("Factorial de 10: %d\n", fact);
     printf("Fibonacci de 10: %d\n", fib);
